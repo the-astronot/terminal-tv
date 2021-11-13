@@ -38,13 +38,13 @@ class ImageP:
 		averages = (r_avg,g_avg,b_avg)
 		return averages
 
-	def pixel_reduce(self, pixels_per_chunk):
+	def pixel_reduce(self, ppc_x, ppc_y):
 		self.rgb_vals = []
 		averages = ()
-		for x in range(0,self.width,pixels_per_chunk):
+		for x in range(0,self.width,ppc_x):
 			column = []
-			for y in range(0,self.height,pixels_per_chunk):
-				averages = self.get_average(x,min(x+pixels_per_chunk,self.width),y,min(y+pixels_per_chunk,self.height))
+			for y in range(0,self.height,ppc_y):
+				averages = self.get_average(x,min(x+ppc_x,self.width),y,min(y+ppc_y,self.height))
 				print(averages)
 				column.append(averages)
 			self.rgb_vals.append(column)
