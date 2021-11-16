@@ -119,63 +119,7 @@ class Frame:
 		for x in range(8):
 			if ratio > math.pow(x,1.5)*.1+.7:
 				char = self.chars[x]
-		'''
-		low_dist = 255
-		secondary = ""
-		char = "B"
-		x = 0
-		for array in self.color_arrays:
-			c_array = [base[0]+array[0],base[1]+array[1],base[2]+array[2]]
-			print(c_array,"->",comp)
-			value = math.sqrt(math.pow(c_array[0]-comp[0],2)+math.pow(c_array[1]-comp[1],2)+math.pow(c_array[2]-comp[2],2))
-			if value < low_dist:
-				low_dist = value
-				secondary = self.color_names[x]
-			x+=1
-		# Check Mids
-		value0 = math.sqrt(math.pow(2*mids[0]-comp[0],2)+math.pow(2*mids[1]-comp[1],2)+math.pow(2*mids[2]-comp[2],2))
-		value1 = math.sqrt(math.pow(mids[0]+self.white_array[0]-comp[0],2)+math.pow(mids[1]+self.white_array[1]-comp[1],2)+math.pow(mids[2]+self.white_array[2]-comp[2],2))
-		value2 = math.sqrt(math.pow(mids[0]-comp[0],2)+math.pow(mids[1]-comp[1],2)+math.pow(mids[2]-comp[2],2))
-		mid_name = ""
-		if mids[0] > 0:
-			if mids[1] > 0:
-				mid_name += "ylw"
-			else:
-				mid_name += "mag"
-		else:
-			mid_name += "cyn"
-		if value0 < low_dist:
-			low_dist = value0
-			main_color = mid_name
-			secondary = "blk"
-		if value1 < low_dist:
-			low_dist = value1
-			main_color = "wht"
-			secondary = mid_name
-		if value2 < low_dist:
-			low_dist = value2
-			main_color = "blk"
-			secondary = mid_name
-		# Check Gray
-		value0 = math.sqrt(math.pow(self.white_array[0]-comp[0],2)+math.pow(self.white_array[1]-comp[1],2)+math.pow(self.white_array[2]-comp[2],2))
-		value1 = math.sqrt(math.pow(self.g_lo[0]-comp[0],2)+math.pow(self.g_lo[1]-comp[1],2)+math.pow(self.g_lo[2]-comp[2],2))
-		value2 = math.sqrt(math.pow(self.g_hi[0]-comp[0],2)+math.pow(self.g_hi[1]-comp[1],2)+math.pow(self.g_hi[2]-comp[2],2))
-		if value0 < low_dist:
-			low_dist = value0
-			main_color = "blk"
-			secondary = "wht"
-			char = "M"
-		if value1 < low_dist:
-			low_dist = value1
-			main_color = "blk"
-			secondary = "wht"
-			char = "."
-		if value2 < low_dist:
-			low_dist = value2
-			main_color = "wht"
-			secondary = "blk"
-			char = "."
-		'''
+	
 		return main_color,secondary,char
 
 
@@ -203,20 +147,3 @@ if __name__ == '__main__':
 			printer.print_char(c_frame.characters[x][y].char)
 		print()
 	printer.reset()
-	'''
-	print("%"*160)
-	print("%"*160)
-	print("%"*160)
-	print("#"*160)
-	print("#"*160)
-	print("#"*160)
-	print("$"*160)
-	print("$"*160)
-	print("$"*160)
-	print("*"*160)
-	print("*"*160)
-	print("*"*160)
-	print("+"*160)
-	print("+"*160)
-	print("+"*160)
-	'''
