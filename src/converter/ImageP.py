@@ -2,7 +2,7 @@
 # that turns images into pixel art
 # Author: jormungandr
 
-from PIL import Image
+from PIL import Image, ImageEnhance
 import math
 
 class ImageP:
@@ -10,6 +10,12 @@ class ImageP:
 	def __init__(self, filename):
 		self.original = filename
 		self.o_image = Image.open(self.original)
+		enhancer = ImageEnhance.Contrast(self.o_image)
+		factor = 1.25
+		self.o_image = enhancer.enhance(factor)
+		enhancer = ImageEnhance.Sharpness(self.o_image)
+		factor = 2
+		self.o_image = enhancer.enhance(factor)
 		self.o_pixels = self.o_image.load()
 		self.width, self.height = self.o_image.size
 		#self.new_image = Image.new(mode="RGB",size=(self.width,self.height))
@@ -45,7 +51,7 @@ class ImageP:
 			column = []
 			for y in range(0,self.height,ppc_y):
 				averages = self.get_average(x,min(x+ppc_x,self.width),y,min(y+ppc_y,self.height))
-				print(averages)
+				#print(averages)
 				column.append(averages)
 			self.rgb_vals.append(column)
 

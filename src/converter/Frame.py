@@ -1,19 +1,33 @@
 import math
+import os
 from Character import Character
 from ImageP import ImageP
 from Printer import Printer
 
 class Frame:
-
+	'''
 	red_array = [127.5,0,0]
+	yellow_array = [127.5,127.5,0]
 	green_array = [0,127.5,0]
+	cyan_array = [0,127.5,127.5]
 	blue_array = [0,0,127.5]
+	magenta_array = [127.5,0,127.5]
 	white_array = [127.5,127.5,127.5]
 	black_array = [0,0,0]
+	'''
+	red_arrays = [[100,15,15],[150,25,25],[60,5,5]]
+	yellow_arrays = [[150,150,50],[150,110,0],[100,90,15],[200,150,50],[90,100,20],[60,60,5],[35,70,5]]
+	green_arrays = [[110,150,10],[25,150,25],[15,100,15],[100,200,50],[5,60,5]]
+	cyan_arrays = [[25,150,150],[15,100,100],[50,200,200],[5,80,80]]
+	blue_arrays = [[25,25,150],[15,15,100],[50,50,200],[5,5,60]]
+	magenta_arrays = [[150,25,150],[110,15,110],[200,50,200]]
+	white_arrays = [[150,150,150],[200,200,200],[105,105,105]]
+	black_arrays = [[15,15,15]]
+	chars = [".",":","v","n","d","B","g","@"]
 	g_hi = [255,255,255]
 	g_lo = [0,0,0]
-	color_arrays = [red_array,green_array,blue_array,white_array,black_array]
-	color_names = ["red","grn","blu","wht","blk"]
+	color_arrays = [red_arrays,yellow_arrays,green_arrays,cyan_arrays,blue_arrays,magenta_arrays,white_arrays,black_arrays]
+	color_names = ["red","ylw","grn","cyn","blu","mag","wht","blk"]
 
 	def __init__(self, image,reduction_x, reduction_y):
 		# image is of type ImageP
@@ -26,46 +40,89 @@ class Frame:
 		num_rows = len(rgb_vals)
 		num_cols = len(rgb_vals[0])
 		self.characters = [[Character() for _ in range(num_cols)] for _ in range(num_rows)]
-		#for _ in self.characters:
-			#print("[",end='')
-			#for _ in self.characters[0]:
-				#print("0",end='')
-			#print("")
+		
 		for i in range(num_rows):
 			for j in range(num_cols):
 				base = [0,0,0]
+				mids = [0,0,0]
 				red = rgb_vals[i][j][0]
-				p_red = red/255.0
 				green = rgb_vals[i][j][1]
-				p_green = green/255.0
 				blue = rgb_vals[i][j][2]
-				p_blue = blue/255.0
 				white = (red+green+blue)/3.0
-				p_white = (p_red+p_green+p_blue)/3.0
-				p_black = 1 - p_white
-				#std_dev = math.sqrt((math.pow(red-white,2)+math.pow(green-white,2)+math.pow(blue-white,2))/3.0)
-				#p_std_dev = (math.pow(p_white-p_red,2)+math.pow(p_white-p_green,2)+math.pow(p_white-p_blue,2))/3.0
-				#print("{0}:{1}:{2:}:{3:.1f}->{4:.3f}".format(red,green,blue,white,std_dev))
-				#print("{0:.3f}:{1:.3f}:{2:.3f}:{3:.3f}:{4:.3f}->{5:.5f}".format(p_red,p_green,p_blue,p_white,p_black,std_dev))
-				#if(std_dev < 20):
-					#self.characters[i][j].bg = "wht"
+				black = 255-white
+				
 				highest_color = 2
+				second_highest = 2
 				highest_val = blue
 				if green > highest_val:
+					second_highest = highest_color
 					highest_color = 1
 					highest_val = green
+				else:
+					second_highest = 1
 				if red > highest_val:
+					second_highest = highest_color
 					highest_color = 0
 					highest_val = red
+				elif red > rgb_vals[i][j][second_highest]:
+					second_highest = 0
 				base[highest_color] = 127.5
-				bg,fg,char = self.get_closest(base, colors[highest_color], [red,green,blue])
+				mids[highest_color] = 127.5
+				mids[second_highest] = 127.5
+				bg,fg,char = self.get_closest(base, colors[highest_color], mids, [red,green,blue])
 				self.characters[i][j].assign_fg_bg(fg,bg)
 				self.characters[i][j].char = char
 
-	def get_closest(self, base, main_color, comp):
+
+	def get_closest(self, base, main_color, mids, comp):
+		low_dist = 255
+		x = 0
+		y = 0
+		char = "."
+		comparison = 30
+		if (abs(abs(comp[0])-abs(comp[1])) < comparison) and (abs(abs(comp[0])-abs(comp[2])) < comparison) and (abs(abs(comp[1])-abs(comp[2])) < comparison):
+			black_val = math.sqrt(math.pow(15-comp[0],2)+math.pow(15-comp[1],2)+math.pow(15-comp[2],2))
+			white_val = math.sqrt(math.pow(200-comp[0],2)+math.pow(200-comp[1],2)+math.pow(200-comp[2],2))
+			if white_val > black_val:
+				main_color = "blk"
+				best_color = [15,15,15]
+				best_value = black_val
+				#secondary = "wht"
+				#secondary_value = math.sqrt(math.pow(215-comp[0],2)+math.pow(215-comp[1],2)+math.pow(215-comp[2],2))
+			else:
+				main_color = "wht"
+				best_color = [200,200,200]
+				best_value = white_val
+				#secondary = "blk"
+				#secondary_value = math.sqrt(math.pow(215-comp[0],2)+math.pow(215-comp[1],2)+math.pow(215-comp[2],2))
+		else:
+			for color in self.color_arrays:
+				for shade in color:
+					value = math.sqrt(math.pow(min(shade[0],255)-comp[0],2)+math.pow(min(shade[1],255)-comp[1],2)+math.pow(min(shade[2],255)-comp[2],2))
+					if value < low_dist:
+						low_dist = value
+						main_color = self.color_names[x]
+						best_color = shade
+				x+=1
+			best_value = low_dist
+		low_dist = 255
+		for color in self.color_arrays:
+			for shade in color:
+				value = math.sqrt(math.pow(min(best_color[0]+shade[0],255)-comp[0],2)+math.pow(min(best_color[1]+shade[1],255)-comp[1],2)+math.pow(min(best_color[2]+shade[2],255)-comp[2],2))
+				if value < low_dist and (self.color_names[y]!= main_color):
+					low_dist = value
+					secondary = self.color_names[y]
+					second_best = shade
+			y+=1
+		secondary_value = low_dist
+		ratio = best_value/(secondary_value+1)
+		for x in range(8):
+			if ratio > math.pow(x,1.5)*.1+.7:
+				char = self.chars[x]
+		'''
 		low_dist = 255
 		secondary = ""
-		char = "."
+		char = "B"
 		x = 0
 		for array in self.color_arrays:
 			c_array = [base[0]+array[0],base[1]+array[1],base[2]+array[2]]
@@ -75,6 +132,30 @@ class Frame:
 				low_dist = value
 				secondary = self.color_names[x]
 			x+=1
+		# Check Mids
+		value0 = math.sqrt(math.pow(2*mids[0]-comp[0],2)+math.pow(2*mids[1]-comp[1],2)+math.pow(2*mids[2]-comp[2],2))
+		value1 = math.sqrt(math.pow(mids[0]+self.white_array[0]-comp[0],2)+math.pow(mids[1]+self.white_array[1]-comp[1],2)+math.pow(mids[2]+self.white_array[2]-comp[2],2))
+		value2 = math.sqrt(math.pow(mids[0]-comp[0],2)+math.pow(mids[1]-comp[1],2)+math.pow(mids[2]-comp[2],2))
+		mid_name = ""
+		if mids[0] > 0:
+			if mids[1] > 0:
+				mid_name += "ylw"
+			else:
+				mid_name += "mag"
+		else:
+			mid_name += "cyn"
+		if value0 < low_dist:
+			low_dist = value0
+			main_color = mid_name
+			secondary = "blk"
+		if value1 < low_dist:
+			low_dist = value1
+			main_color = "wht"
+			secondary = mid_name
+		if value2 < low_dist:
+			low_dist = value2
+			main_color = "blk"
+			secondary = mid_name
 		# Check Gray
 		value0 = math.sqrt(math.pow(self.white_array[0]-comp[0],2)+math.pow(self.white_array[1]-comp[1],2)+math.pow(self.white_array[2]-comp[2],2))
 		value1 = math.sqrt(math.pow(self.g_lo[0]-comp[0],2)+math.pow(self.g_lo[1]-comp[1],2)+math.pow(self.g_lo[2]-comp[2],2))
@@ -94,17 +175,22 @@ class Frame:
 			main_color = "wht"
 			secondary = "blk"
 			char = "."
+		'''
 		return main_color,secondary,char
 
 
 if __name__ == '__main__':
-	#filename = "PinkFloyd"
 	filename = "Initial_D"
+	#filename = "takumi"
+	#filename = "The_Great_Wave"
+	#filename = "mind_fuzz"
 	image = "../../images/{}.jpg".format(filename)
 	processor = ImageP(image)
 	o_x, o_y = processor.width, processor.height
-	chunk_x = math.ceil(o_x/80.0)
-	chunk_y = math.ceil(o_y/24.0)
+	cols,rows = os.get_terminal_size()
+	print(cols,rows)
+	chunk_x = math.ceil(o_x/float(cols))
+	chunk_y = math.ceil(o_y/float(rows-1))
 	c_frame = Frame(processor,chunk_x,chunk_y)
 	c_frame.reduce_to_two()
 	printer = Printer()
@@ -113,5 +199,24 @@ if __name__ == '__main__':
 			fg, bg = c_frame.characters[x][y].get_fg_bg()
 			printer.change_fg(fg)
 			printer.change_bg(bg)
+			printer.option = c_frame.characters[x][y].option
 			printer.print_char(c_frame.characters[x][y].char)
 		print()
+	printer.reset()
+	'''
+	print("%"*160)
+	print("%"*160)
+	print("%"*160)
+	print("#"*160)
+	print("#"*160)
+	print("#"*160)
+	print("$"*160)
+	print("$"*160)
+	print("$"*160)
+	print("*"*160)
+	print("*"*160)
+	print("*"*160)
+	print("+"*160)
+	print("+"*160)
+	print("+"*160)
+	'''

@@ -3,6 +3,7 @@
 class Character:
 	char = "."
 	fg, bg = "wht", "blk"
+	option = ""
 	
 	def __init__(self):
 		pass

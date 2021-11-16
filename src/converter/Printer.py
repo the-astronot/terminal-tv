@@ -7,14 +7,14 @@ class Printer:
 		self.option = ""
 
 	def change_fg(self,new_color):
-		colors = ["blk","red","grn","blu","wht"]
-		codes = [30,31,32,34,37]
+		colors = ["blk","red","grn","ylw","blu","mag","cyn","wht"]
+		codes = [30,31,32,33,34,35,36,37]
 		for color_num in range(len(colors)):
 			if colors[color_num] == new_color:
 				self.fg = codes[color_num]
 	def change_bg(self,new_color):
-		colors = ["blk","red","grn","blu","wht"]
-		codes = [40,41,42,44,47]
+		colors = ["blk","red","grn","ylw","blu","mag","cyn","wht"]
+		codes = [40,41,42,43,44,45,46,47]
 		for color_num in range(len(colors)):
 			if colors[color_num] == new_color:
 				self.bg = codes[color_num]
