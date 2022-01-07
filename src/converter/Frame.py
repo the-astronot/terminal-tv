@@ -15,14 +15,14 @@ class Frame:
 	white_array = [127.5,127.5,127.5]
 	black_array = [0,0,0]
 	'''
-	red_arrays = [[100,15,15],[150,25,25],[60,5,5]]
+	red_arrays = [[100,15,15],[150,25,25],[250,25,25],[60,5,5]]
 	yellow_arrays = [[150,150,50],[150,110,0],[100,90,15],[200,150,50],[90,100,20],[60,60,5],[35,70,5]]
-	green_arrays = [[110,150,10],[25,150,25],[15,100,15],[100,200,50],[5,60,5]]
+	green_arrays = [[110,150,10],[25,150,25],[15,100,15],[100,200,50],[50,200,50],[100,250,100],[5,60,5]]
 	cyan_arrays = [[25,150,150],[15,100,100],[50,200,200],[5,80,80]]
 	blue_arrays = [[25,25,150],[15,15,100],[50,50,200],[5,5,60]]
 	magenta_arrays = [[150,25,150],[110,15,110],[200,50,200]]
 	white_arrays = [[150,150,150],[200,200,200],[105,105,105]]
-	black_arrays = [[15,15,15]]
+	black_arrays = [[0,0,0]]
 	chars = [".",":","v","n","d","B","g","@"]
 	g_hi = [255,255,255]
 	g_lo = [0,0,0]
@@ -79,7 +79,7 @@ class Frame:
 		x = 0
 		y = 0
 		char = "."
-		comparison = 30
+		comparison = 100
 		if (abs(abs(comp[0])-abs(comp[1])) < comparison) and (abs(abs(comp[0])-abs(comp[2])) < comparison) and (abs(abs(comp[1])-abs(comp[2])) < comparison):
 			black_val = math.sqrt(math.pow(15-comp[0],2)+math.pow(15-comp[1],2)+math.pow(15-comp[2],2))
 			white_val = math.sqrt(math.pow(200-comp[0],2)+math.pow(200-comp[1],2)+math.pow(200-comp[2],2))
@@ -128,6 +128,7 @@ if __name__ == '__main__':
 	#filename = "takumi"
 	#filename = "The_Great_Wave"
 	#filename = "mind_fuzz"
+	filename = "BjH"
 	image = "../../images/{}.jpg".format(filename)
 	processor = ImageP(image)
 	o_x, o_y = processor.width, processor.height

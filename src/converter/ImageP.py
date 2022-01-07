@@ -1,5 +1,5 @@
-# This file was copied from one of my other projects, Project-Pixel, 
-# that turns images into pixel art
+# This file was originally copied from one of my other projects, 
+# Project-Pixel, that turns images into pixel art
 # Author: jormungandr
 
 from PIL import Image, ImageEnhance
@@ -18,8 +18,6 @@ class ImageP:
 		self.o_image = enhancer.enhance(factor)
 		self.o_pixels = self.o_image.load()
 		self.width, self.height = self.o_image.size
-		#self.new_image = Image.new(mode="RGB",size=(self.width,self.height))
-		#self.new_pixels = self.new_image.load()
 		self.rgb_vals = []
 
 	def save_modified_relative(self, filename):
@@ -58,18 +56,3 @@ class ImageP:
 	def palette_reduce(self, palette_size):
 		pass
 
-"""	
-	def modify_file_from_array(self, chunk_size):
-		print(len(self.rgb_vals), len(self.rgb_vals[0]))
-		width = len(self.rgb_vals)*chunk_size
-		height = len(self.rgb_vals[-1])*chunk_size
-		print(width,height)
-		self.new_image = Image.new(mode="RGB",size=(width,height))
-		self.new_pixels = self.new_image.load()
-		for i in range(len(self.rgb_vals)):
-			for j in range(len(self.rgb_vals[0])):
-				for x in range(i*chunk_size,(i+1)*chunk_size):
-					for y in range(j*chunk_size,(j+1)*chunk_size):
-						self.new_pixels[x,y] = self.rgb_vals[i][j]
-		self.save_modified()
-"""
