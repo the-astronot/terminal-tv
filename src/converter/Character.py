@@ -1,5 +1,3 @@
-
-
 class Character:
 	char = "."
 	fg, bg = "wht", "blk"
@@ -14,3 +12,5 @@ class Character:
 
 	def get_fg_bg(self):
 		return self.fg,self.bg
+
+	

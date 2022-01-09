@@ -4,12 +4,15 @@
 
 from PIL import Image, ImageEnhance
 import math
+import cv2
+from cv2 import COLOR_BGR2RGB
 
 class ImageP:
 	
 	def __init__(self, filename):
-		self.original = filename
-		self.o_image = Image.open(self.original)
+		filename = cv2.cvtColor(filename,COLOR_BGR2RGB)
+		self.o_image = Image.fromarray(filename)
+		#self.o_image = Image.open(self.original)
 		enhancer = ImageEnhance.Contrast(self.o_image)
 		factor = 1.25
 		self.o_image = enhancer.enhance(factor)

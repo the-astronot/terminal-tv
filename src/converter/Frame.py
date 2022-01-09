@@ -1,19 +1,13 @@
 import math
 import os
-from Character import Character
-from ImageP import ImageP
-from Printer import Printer
+from src.converter.Character import Character
+from src.converter.ImageP import ImageP
+from src.converter.Printer import Printer
 
 class Frame:
 	'''
-	red_array = [127.5,0,0]
-	yellow_array = [127.5,127.5,0]
-	green_array = [0,127.5,0]
-	cyan_array = [0,127.5,127.5]
-	blue_array = [0,0,127.5]
-	magenta_array = [127.5,0,127.5]
-	white_array = [127.5,127.5,127.5]
-	black_array = [0,0,0]
+	A class devoted to processing images and converting
+	them into ascii text
 	'''
 	red_arrays = [[100,15,15],[150,25,25],[250,25,25],[60,5,5]]
 	yellow_arrays = [[150,150,50],[150,110,0],[100,90,15],[200,150,50],[90,100,20],[60,60,5],[35,70,5]]
@@ -23,7 +17,8 @@ class Frame:
 	magenta_arrays = [[150,25,150],[110,15,110],[200,50,200]]
 	white_arrays = [[150,150,150],[200,200,200],[105,105,105]]
 	black_arrays = [[0,0,0]]
-	chars = [".",":","v","n","d","B","g","@"]
+	#chars = [".",":","v","n","d","B","g","@"]
+	chars = [":","n","B","@"]
 	g_hi = [255,255,255]
 	g_lo = [0,0,0]
 	color_arrays = [red_arrays,yellow_arrays,green_arrays,cyan_arrays,blue_arrays,magenta_arrays,white_arrays,black_arrays]
@@ -39,6 +34,8 @@ class Frame:
 		rgb_vals = self.image.rgb_vals
 		num_rows = len(rgb_vals)
 		num_cols = len(rgb_vals[0])
+		self.x = num_rows
+		self.y = num_cols
 		self.characters = [[Character() for _ in range(num_cols)] for _ in range(num_rows)]
 		
 		for i in range(num_rows):
@@ -116,11 +113,31 @@ class Frame:
 			y+=1
 		secondary_value = low_dist
 		ratio = best_value/(secondary_value+1)
-		for x in range(8):
-			if ratio > math.pow(x,1.5)*.1+.7:
+		char = self.chars[0]
+		for x in range(4):
+			if ratio > math.pow(2*x,1.5)*.1+.7:
 				char = self.chars[x]
 	
 		return main_color,secondary,char
+
+	def get_ascii_block(self):
+		block=""
+		for y in range(len(self.characters[0])):
+			for x in range(len(self.characters)):
+				fg, bg = self.characters[x][y].get_fg_bg()
+				block+=self.characters[x][y].char
+		return block
+
+	def print_frame(self, printer):
+		for y in range(len(self.characters[0])):
+			for x in range(len(self.characters)):
+				fg, bg = self.characters[x][y].get_fg_bg()
+				printer.change_fg(fg)
+				printer.change_bg(bg)
+				printer.option = self.characters[x][y].option
+				printer.print_char(self.characters[x][y].char)
+			print()
+		printer.reset()
 
 
 if __name__ == '__main__':
