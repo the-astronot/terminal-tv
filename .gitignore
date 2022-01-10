@@ -129,8 +129,7 @@ dmypy.json
 .pyre/
 
 
-# Random shit
-images/BH
+# Videos, audio, and terminal files
 *.mp*
 *.mkv
-*.txt
+*.trm

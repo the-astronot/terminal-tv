@@ -12,7 +12,7 @@ import math
 
 if __name__ == '__main__':
 	filename = "videos/Gorillaz.mkv"
-	filename = "videos/Bojack_Horseman_S01E01.mkv"
+	#filename = "videos/Bojack_Horseman_S01E01.mkv"
 	video = Video(filename)
 	printer = Printer()
 	#video.strip_audio("audio/{}".format(filename.split("/")[-1].strip(".mkv")))

@@ -23,9 +23,6 @@ class FileReader:
 		self.x = int.from_bytes(self.file.read(2),byteorder="big")
 		self.y = int.from_bytes(self.file.read(2),byteorder="big")
 		self.spf = struct.unpack('>f',self.file.read(4))[0]-.095
-		#print(self.x)
-		#print(self.y)
-		#print(self.spf)
 
 	def read_frame(self):
 		text = ""
@@ -50,10 +47,9 @@ class FileReader:
 					if byte_val >= 2**(7-i):
 						ch_val += 2**(7-i)
 						byte_val -= 2**(7-i)
-				#print(fg_val,bg_val,ch_val)
 				text += translate(fg_val,bg_val,ch_val)
 			text += "\n"
-		return text
+		return text.strip("\n")
 
 
 if __name__ == '__main__':
