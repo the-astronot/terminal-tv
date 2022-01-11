@@ -22,7 +22,7 @@ class FileReader:
 		self.file = open(self.filename,"rb")
 		self.x = int.from_bytes(self.file.read(2),byteorder="big")
 		self.y = int.from_bytes(self.file.read(2),byteorder="big")
-		self.spf = struct.unpack('>f',self.file.read(4))[0]-.095
+		self.spf = struct.unpack('>f',self.file.read(4))[0]
 
 	def read_frame(self):
 		text = ""

@@ -1,26 +1,12 @@
 ################################################################################
-##  Terminal_TV Selector                                                      ##
+##  Terminal_TV Directory                                                     ##
 ####  author: jormungandr                                                   ####
 ####  exec: none                                                            ####
 ####  created: 01/09/22                                                     ####
 ################################################################################
 import os
 import sys
-#from pynput import keyboard
 import getch as gh
-
-
-class Selector:
-	def __init__(self, path):
-		self.home = path
-		#self.player = player
-		self.branch_name = ""
-		self.branch = []
-		self.home_dir = Directory(path,"",True)
-
-	def display_tree(self):
-		for x in self.branch:
-			print(x)
 
 
 class Directory:
@@ -37,13 +23,16 @@ class Directory:
 				self.add_folder(file)
 
 	def add_folder(self, foldername):
-		self.folders.append(Directory(os.path.join(self.path,foldername),foldername,True))
+		self.folders.append(Directory(os.path.join(self.path,foldername),foldername,False))
 
 	def add_file(self,filename):
 		self.files.append(filename)
 
 	def toggle_visibility(self):
-		self.display = not self.display
+		if self.display:
+			self.display = False
+		else:
+			self.display = True
 
 	def print_folder(self, indent):
 		if self.display:
@@ -62,53 +51,24 @@ class Directory:
 					print(indent+"├─ {}".format(file))
 
 	def folder_array(self, indent):
-		array = []
+		name_array = []
+		obj_array = []
 		if self.display:
 			for folder in self.folders:
 				if (len(self.files)==0 and folder==self.folders[-1]):
-					array.append(indent+"└─ {}".format(folder.name))
+					name_array.append(indent+"└─ {}".format(folder.name))
 					next_indent = indent + "   "
 				else:
-					array.append(indent+"├─ {}".format(folder.name))
+					name_array.append(indent+"├─ {}".format(folder.name))
 					next_indent = indent + "│  "
-				array+=folder.folder_array(next_indent)
+				obj_array.append(folder)
+				name_array+=folder.folder_array(next_indent)[0]
+				obj_array+=folder.folder_array(next_indent)[1]
 			for file in self.files:
 				if file == self.files[-1]:
-					array.append(indent+"└─ {}".format(file))
+					name_array.append(indent+"└─ {}".format(file))
 				else:
-					array.append(indent+"├─ {}".format(file))
-		return array
-
-
-def on_press(key):
-	global index
-	print(key)
-	if key == "up":
-		index+=1
-		print(index)
-	elif key == "down":
-		index-=1
-		print(index)
-
-
-def get_key():
-    first_char = gh.getch()
-    if first_char == '\x1b':
-        return {'[A': 'up', '[B': 'down', '[C': 'right', '[D': 'left'}[gh.getch() + gh.getch()]
-    else:
-        return first_char
-
-
-index=0
-
-if __name__ == '__main__':
-	
-	sel = Selector(os.getcwd())
-	sel.display_tree()
-	array = sel.home_dir.folder_array("")
-	for element in array:
-		print(element)
-	while True:
-		on_press(get_key())
-	
+					name_array.append(indent+"├─ {}".format(file))
+				obj_array.append(os.path.join(self.path,file))
+		return name_array, obj_array
 
