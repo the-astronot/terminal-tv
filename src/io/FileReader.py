@@ -16,6 +16,7 @@ class FileReader:
 
 	colors = ["red","ylw","grn","cyn","blu","mag","wht","blk"]
 	values = ['100','110','010','011','001','101','111','000']
+	byte_offset = 8
 
 	def __init__(self, filename):
 		self.filename = filename
@@ -23,6 +24,11 @@ class FileReader:
 		self.x = int.from_bytes(self.file.read(2),byteorder="big")
 		self.y = int.from_bytes(self.file.read(2),byteorder="big")
 		self.spf = struct.unpack('>f',self.file.read(4))[0]
+		self.max_frames = int(os.path.getsize(filename) - 8)/(self.x*self.y)
+
+	def seek_frame(self, frame_num):
+		offset = self.x*self.y*frame_num + self.byte_offset
+		self.file.seek(offset)
 
 	def read_frame(self):
 		text = ""

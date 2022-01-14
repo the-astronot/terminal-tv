@@ -5,8 +5,7 @@
 ####  created: 01/09/22                                                     ####
 ################################################################################
 import os
-import sys
-import getch as gh
+import time
 
 
 class Directory:
@@ -18,7 +17,12 @@ class Directory:
 		self.files = []
 		for file in os.listdir(self.path):
 			if os.path.isfile(os.path.join(self.path,file)):
-				self.add_file(file)
+				try:
+					ext = file.split(".")[1]
+				except IndexError:
+					ext = ""
+				if ext == "trm":
+					self.add_file(file)
 			else:
 				self.add_folder(file)
 
@@ -65,6 +69,7 @@ class Directory:
 				name_array+=folder.folder_array(next_indent)[0]
 				obj_array+=folder.folder_array(next_indent)[1]
 			for file in self.files:
+				#if file.split(".")[1] == "trm":
 				if file == self.files[-1]:
 					name_array.append(indent+"└─ {}".format(file))
 				else:

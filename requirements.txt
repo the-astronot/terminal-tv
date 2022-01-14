@@ -1,1 +1,4 @@
-getch
+opencv-python
+python-vlc
+pillow
+colorama
