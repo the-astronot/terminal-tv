@@ -39,6 +39,7 @@ def on_press(key, player):
 			player.skip(30)
 		elif key == "e":
 			player.stop()
+			Screens.wipe_screen(player.termy)
 		elif key == " ":
 			player.play_pause()
 		elif key == "w":
@@ -59,6 +60,7 @@ def on_press(key, player):
 		if player.loaded:
 			player.stop()
 		Screens.wipe_screen(player.termy)
+		print("\033[0m",end="\r")
 		return False
 	time.sleep(.05)
 	return True

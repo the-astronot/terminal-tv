@@ -85,8 +85,9 @@ def calc_completion(frame_num,total_frames):
 def quick_convert(interval,x_redux,y_redux,filename,sec_per_frame,total_frames,dest,file):
 	global frames
 	global current_frame
-	num_threads = 10
+	num_threads = 5
 	loaders = []
+	start_time  = time.time()
 	for i in range(num_threads):
 		l = threading.Thread(target=load_image,args=[interval*i,interval*num_threads,filename,x_redux,y_redux,interval])
 		loaders.append(l)
@@ -102,6 +103,8 @@ def quick_convert(interval,x_redux,y_redux,filename,sec_per_frame,total_frames,d
 			frames.pop(0)
 			frame_num += 1
 			calc_completion(frame_num, total_frames)
+			end_time = time.time()
+			print("{} FPS".format(frame_num/(end_time-start_time)), end="")
 		active = False
 		for thread in loaders:
 			if thread.isAlive():

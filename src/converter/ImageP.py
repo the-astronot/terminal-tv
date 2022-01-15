@@ -52,10 +52,5 @@ class ImageP:
 			column = []
 			for y in range(0,self.height,ppc_y):
 				averages = self.get_average(x,min(x+ppc_x,self.width),y,min(y+ppc_y,self.height))
-				#print(averages)
 				column.append(averages)
 			self.rgb_vals.append(column)
-
-	def palette_reduce(self, palette_size):
-		pass
-

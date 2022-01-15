@@ -27,7 +27,7 @@ def print_selector(files,cursor,term_len):
 			begin -=1
 			end -= 1
 	# Gross Printing Logic
-	print("\033[0;0H",end="")
+	print("\033[H",end="")
 	for i in range(begin,end):
 		if i == cursor:
 			print("\033[K\033[30m\033[47m{0}\033[40m\033[37m".format(files[0][i]))
@@ -49,11 +49,11 @@ def print_starter(termx,termy,b_offset,frame_num,max_frames):
 	start_frame += progress_bar(frame_num, max_frames, termx-4) + "\n"
 	start_frame += "|[Q] Quit\t|[Space] Play/Pause\t|[E] Eject\t|[A] Rewind\t|[D] Fast_Forward\t|"
 	print(start_frame,end="")
-	print("\033[0;0H",end="")
+	print("\033[H",end="")
 
 
 def print_frame(text, frame_num, max_frames, width):
-	print("\033[0;0H",end="")
+	print("\033[H",end="")
 	print(text)
 	print(progress_bar(frame_num,max_frames,width),end="")
 
