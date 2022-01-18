@@ -89,5 +89,6 @@ def main(player):
 	
 if __name__ == '__main__':
 	print("\033[2J",end="")
-	player = Player(os.getcwd(),audio_available)
+	media_location = os.path.join(os.getcwd(),"example_filesystem")
+	player = Player(media_location,audio_available)
 	main(player)

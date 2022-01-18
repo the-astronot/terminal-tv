@@ -2,6 +2,7 @@
 # Project-Pixel, that turns images into pixel art
 # Author: jormungandr
 
+from re import X
 from PIL import Image, ImageEnhance
 import math
 import cv2
@@ -9,18 +10,22 @@ from cv2 import COLOR_BGR2RGB
 
 class ImageP:
 	
-	def __init__(self, filename):
+	def __init__(self, filename,x,y):
 		filename = cv2.cvtColor(filename,COLOR_BGR2RGB)
+		self.x = x
+		self.y = y
 		self.o_image = Image.fromarray(filename)
 		#self.o_image = Image.open(self.original)
-		enhancer = ImageEnhance.Contrast(self.o_image)
+		#enhancer = ImageEnhance.Contrast(self.o_image)
 		factor = 1.25
-		self.o_image = enhancer.enhance(factor)
-		enhancer = ImageEnhance.Sharpness(self.o_image)
+		#self.o_image = enhancer.enhance(factor)
+		#enhancer = ImageEnhance.Sharpness(self.o_image)
 		factor = 2
-		self.o_image = enhancer.enhance(factor)
-		self.o_pixels = self.o_image.load()
+		#self.o_image = enhancer.enhance(factor)
+		#self.o_pixels = self.o_image.load()
 		self.width, self.height = self.o_image.size
+		self.r_image = self.o_image.resize((self.x,self.y),0)
+		self.o_pixels = self.r_image.load()
 		self.rgb_vals = []
 
 	def save_modified_relative(self, filename):
@@ -53,4 +58,12 @@ class ImageP:
 			for y in range(0,self.height,ppc_y):
 				averages = self.get_average(x,min(x+ppc_x,self.width),y,min(y+ppc_y,self.height))
 				column.append(averages)
+			self.rgb_vals.append(column)
+
+	def get_pixels(self):
+		self.rgb_vals = []
+		for x in range(self.x):
+			column = []
+			for y in range(self.y):
+				column.append(self.o_pixels[x,y])
 			self.rgb_vals.append(column)

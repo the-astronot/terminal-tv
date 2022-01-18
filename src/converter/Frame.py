@@ -8,7 +8,7 @@ class Frame:
 	'''
 	A class devoted to processing images and converting
 	them into ascii text
-	'''
+	
 	red_arrays = [[100,15,15],[150,25,25],[250,25,25],[60,5,5]]
 	yellow_arrays = [[150,150,50],[150,110,0],[100,90,15],[200,150,50],[90,100,20],[60,60,5],[35,70,5]]
 	green_arrays = [[110,150,10],[25,150,25],[15,100,15],[100,200,50],[50,200,50],[100,250,100],[5,60,5]]
@@ -22,13 +22,28 @@ class Frame:
 	g_hi = [255,255,255]
 	g_lo = [0,0,0]
 	color_arrays = [red_arrays,yellow_arrays,green_arrays,cyan_arrays,blue_arrays,magenta_arrays,white_arrays,black_arrays]
+	'''
 	color_names = ["red","ylw","grn","cyn","blu","mag","wht","blk"]
+	
 
-	def __init__(self, image,reduction_x, reduction_y):
+	def __init__(self, image,reduction_x=None, reduction_y=None):
 		# image is of type ImageP
 		self.image = image
-		self.image.pixel_reduce(reduction_x, reduction_y)
+		self.image.get_pixels()
+		#self.image.pixel_reduce(reduction_x, reduction_y)
+		self.x = len(self.image.rgb_vals)
+		self.y = len(self.image.rgb_vals[0])
+		self.bytes = []
 
+	def reduce_to_bytes(self,dict):
+		for j in range(len(self.image.rgb_vals[0])):
+			for i in range(len(self.image.rgb_vals)):
+				r = math.floor(self.image.rgb_vals[i][j][0]/8.0)
+				g = math.floor(self.image.rgb_vals[i][j][1]/8.0)
+				b = math.floor(self.image.rgb_vals[i][j][2]/8.0)
+				self.bytes.append(dict["{0:03d}{1:03d}{2:03d}".format(r,g,b)])
+				
+	'''
 	def reduce_to_two(self):
 		colors = ["red","grn","blu"]
 		rgb_vals = self.image.rgb_vals
@@ -119,6 +134,7 @@ class Frame:
 				char = self.chars[x]
 	
 		return main_color,secondary,char
+	'''
 
 	def get_ascii_block(self):
 		block=""

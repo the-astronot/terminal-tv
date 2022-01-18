@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+project( Converter )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+SET(GCC_COVERAGE_COMPILE_FLAGS "-std=c++1z -g")
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+add_executable( Converter src/main.cpp )
+target_link_libraries( Converter ${OpenCV_LIBS} )

@@ -55,7 +55,8 @@ def print_starter(termx,termy,b_offset,frame_num,max_frames):
 def print_frame(text, frame_num, max_frames, width):
 	print("\033[H",end="")
 	print(text)
-	print(progress_bar(frame_num,max_frames,width),end="")
+	print(progress_bar(frame_num,max_frames,width))
+	print("|[Q] Quit\t|[Space] Play/Pause\t|[E] Eject\t|[A] Rewind\t|[D] Fast_Forward\t|",end="")
 
 
 def print_pickup(termy,termx,ptime,cursor):

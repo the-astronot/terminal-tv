@@ -19,7 +19,7 @@ class FileWriter:
 		self.filename = filename
 		f = open(self.filename,"w")
 		f.close()
-		self.file = open(self.filename,"ab")
+		self.file = open(self.filename,"wb")
 		self.file.write((x).to_bytes(2,byteorder="big"))
 		self.file.write((y).to_bytes(2,byteorder="big"))
 		self.file.write(struct.pack('>f',spf))
@@ -52,6 +52,14 @@ class FileWriter:
 					if byte[7-i] == '1':
 						byte_val += 2**i
 				self.file.write((byte_val).to_bytes(1,byteorder="big"))
+
+	def add_bytes(self, frame):
+		for byte in frame.bytes:
+			byte_val = 0
+			for i in range(8):
+				if byte[7-i] == '1':
+					byte_val += 2**i
+			self.file.write((byte_val).to_bytes(1,byteorder="big"))
 	
 	def end_file(self):
 		self.file.close()

@@ -31,9 +31,12 @@ class Player:
 		self.video = video
 		if audio and self.audio_available:
 			self.audio = vlc.MediaPlayer(audio)
+			self.audio.audio_set_volume(0)
 			self.audio.play()
 			time.sleep(.5)
 			self.audio.pause()
+			self.audio.set_time(0)
+			self.audio.audio_set_volume(100)
 		self.termx = self.video.x
 		self.termy = self.video.y + self.button_offset
 		self.spf = self.video.spf
@@ -101,15 +104,14 @@ class Player:
 		Screens.print_frame(text,self.frame_num,self.video.max_frames, self.termx-4)
 
 	def skip(self, time_interval):
-		req_pause = self.play # Do I have to stop beforehand?
+		req_pause = self.play and self.audio # Do I have to stop beforehand?
 		time_val = 0
 		if req_pause: # Pause
-			self.play_pause()
-			time.sleep(self.spf)
+			self.audio.pause()
+			self.audio_changed = True
+			#time.sleep(.5)
 		num_frames = math.floor(time_interval/self.spf)
 		self.frame_num += num_frames
-		if self.audio:
-			time_val = self.audio.get_time()
 		if self.frame_num < 0:
 			self.frame_num = 0
 			time_val = 0
@@ -117,11 +119,8 @@ class Player:
 			self.stop()
 			return
 		else:
-			time_val += int(time_interval*1000)
+			time_val = int(self.frame_num*self.spf*1000)
 		self.video.seek_frame(self.frame_num)
 		if self.audio:
 			self.audio.set_time(time_val)
-		if req_pause: # Play again
-			self.play_pause()
-		else:
-			self.next_frame()
+		self.next_frame()

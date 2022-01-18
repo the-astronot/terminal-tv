@@ -11,7 +11,8 @@ class Video:
 		self.curr_frame_num = 0
 	
 	def get_frame(self,interval):
-		self.vidcap.set(cv2.CAP_PROP_POS_FRAMES,self.curr_frame_num)
+		for _ in range(interval-1):
+			self.vidcap.read()
 		self.curr_frame_num += interval
 		return self.vidcap.read()
 

@@ -133,3 +133,12 @@ dmypy.json
 *.mp*
 *.mkv
 *.trm
+
+# Cpp
+src/cpp_converter/build
+src/cpp_converter/opencv
+*/Converter
+# CMAKE
+CMakeCache.txt
+*.cmake
+CMakeFiles
