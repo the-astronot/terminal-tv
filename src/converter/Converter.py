@@ -4,6 +4,7 @@ from src.converter.Frame import Frame
 from src.converter.ImageP import ImageP
 from src.converter.Printer import Printer
 from src.io.FileWriter import FileWriter
+from src.io.Episode import Episode
 # Libraries
 import cv2
 import math
@@ -11,13 +12,22 @@ import os
 import time
 
 
-def convert(filename, dest, term_width, fps_set, dict):
+def convert(filename, episode_name, dest, term_width, fps_set, dict):
 	video = Video(filename)
-	file = os.path.basename(filename).replace(".mkv",".trm").replace(".mp4",".trm")
-	audio_filename = os.path.join(dest,file.replace(".trm",""))
-	if not os.path.exists(audio_filename+".mp3"):
+	episode_name = os.path.join(dest,episode_name) + ".dtrm"
+	folders = os.path.dirname(episode_name)
+	try:
+		os.makedirs(folders)
+	except OSError:
+		pass
+	episode = Episode(episode_name)
+	episode.read_episode()
+	file = os.path.join(folders,(os.path.basename(filename)).replace(".mkv","").replace(".mp4","")+"_{}.trm".format(len(episode.files)))
+	audio_filename = episode_name.replace(".dtrm","")
+	if episode.audio_file == "":
 		print("Beginning Stripping Audio...")
 		video.strip_audio(audio_filename)
+		episode.audio_file = audio_filename + ".mp3"
 		print("Finishing Stripping Audio")
 	# Getting video dimensions
 	print("Getting Video Dimensions")
@@ -34,12 +44,12 @@ def convert(filename, dest, term_width, fps_set, dict):
 	sec_per_frame = float(float(interval)/float(fps))
 	print("[Interval] = {1}\n[Sec/Frame] = {0:.3f}".format(sec_per_frame,interval))
 	# Sets image reduction levels
-	x_redux = math.ceil(width/float(term_width))
-	y_redux = math.ceil(x_redux*2.2)
+	x_redux = width/float(term_width)
+	y_redux = (x_redux*2)
 	term_height = int(height/float(y_redux))
 	# BEGIN PROCESSING
 	start_time = time.time()
-	filewriter = FileWriter(os.path.join(dest,file),term_width,term_height,sec_per_frame)
+	filewriter = FileWriter(file,term_width,term_height,sec_per_frame)
 	# PROCESS UNTIL EOF
 	frame_count = 0
 	while(frame_count < total_frames):
@@ -54,6 +64,8 @@ def convert(filename, dest, term_width, fps_set, dict):
 		end_time = time.time()
 		print("{:.2f}% Complete {:.3f} FPS".format(float(frame_count/total_frames)*100,frame_count/(end_time-start_time)),end="\r")
 	# CLOSE EVERYTHING UP
+	episode.add_file(file,term_width)
 	filewriter.end_file()
+	episode.write_episode()
 	video.vidcap.release()
 	cv2.destroyAllWindows()

@@ -21,7 +21,7 @@ class Directory:
 					ext = file.split(".")[1]
 				except IndexError:
 					ext = ""
-				if ext == "trm":
+				if ext == "dtrm":
 					self.add_file(file)
 			else:
 				self.add_folder(file)
@@ -69,11 +69,9 @@ class Directory:
 				name_array+=folder.folder_array(next_indent)[0]
 				obj_array+=folder.folder_array(next_indent)[1]
 			for file in self.files:
-				#if file.split(".")[1] == "trm":
 				if file == self.files[-1]:
-					name_array.append(indent+"└─ {}".format(file))
+					name_array.append(indent+"└─ {}".format(file.replace(".dtrm","")))
 				else:
-					name_array.append(indent+"├─ {}".format(file))
+					name_array.append(indent+"├─ {}".format(file.replace(".dtrm","")))
 				obj_array.append(os.path.join(self.path,file))
 		return name_array, obj_array
-

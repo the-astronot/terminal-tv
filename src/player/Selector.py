@@ -5,7 +5,8 @@
 ####  created: 01/13/22                                                     ####
 ################################################################################
 # Imports from src
-from src.player.Directory import Directory
+from src.io.Directory import Directory
+from src.io.Episode import Episode
 from src.io.FileReader import FileReader
 import src.player.Screens as Screens
 # Library Imports
@@ -35,16 +36,15 @@ class Selector:
 			self.cursor-=1
 
 	def increment_backup_cursor(self,length):
-		self.backup_cursor = min(self.backup_cursor,length-1)
+		self.backup_cursor = min(self.backup_cursor+1,length-1)
 
 	def decrement_backup_cursor(self):
-		self.backup_cursor = max(self.backup_cursor,0)
-
+		self.backup_cursor = max(self.backup_cursor-1,0)
 
 	# Dealing with Directories and Files
 	def update_files(self):
 		self.files = self.media_dir.folder_array("")
-
+	'''
 	def toggle(self, player):
 		file = self.get_filedata()
 		if not isinstance(file,Directory):
@@ -68,8 +68,32 @@ class Selector:
 				player.queue_at_time(fr,audio_file,self.recovery_time)
 			else:
 				player.queue(fr,audio_file)
+	'''
+	def toggle(self,player):
+		file = self.get_filedata()
+		if self.target == 0:
+			#file = self.get_filedata()
+			if isinstance(file,Directory):
+				# Change the visibility of the directory
+				file.toggle_visibility()
+				self.update_files()
+			else:
+				# Queue the video
+				episode = Episode(file)
+				episode.read_episode()
+				if episode.time == 0:
+					player.queue(episode)
+				else:
+					self.target = 1
+					self.episode = episode
+		elif self.target == 1:
+			self.target = 0
+			if self.backup_cursor == 0:
+				player.queue(self.episode)
+			else:
+				self.episode.time = 0
+				player.queue(self.episode)
 
-	
 	# GETTERS
 	def get_filename(self):
 		return self.files[0][self.cursor]

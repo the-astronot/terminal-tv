@@ -44,10 +44,10 @@ def on_press(key, player):
 			player.play_pause()
 		elif key == "w":
 			# increase size
-			pass
+			player.change_resolution(0)
 		elif key == "s":
 			# decrease size
-			pass
+			player.change_resolution(1)
 	else:
 		if key == "w":
 				player.decrement_cursor()

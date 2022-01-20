@@ -2,7 +2,6 @@
 # AUTHOR: JORMUNGANDR
 #####################
 # MY IMPORTS
-from src.converter.Frame import Frame
 from src.converter.Translate import translate
 # IMPORTS
 import os
