@@ -60,6 +60,11 @@ class FileWriter:
 				if byte[7-i] == '1':
 					byte_val += 2**i
 			self.file.write((byte_val).to_bytes(1,byteorder="big"))
+
+	def overwrite_sec_per_frame(self, new_sec_per_frame):
+		self.file.seek(4)
+		self.file.write(struct.pack('>f',new_sec_per_frame))
+		self.file.seek(0,2)
 	
 	def end_file(self):
 		self.file.close()

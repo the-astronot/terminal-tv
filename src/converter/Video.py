@@ -17,5 +17,5 @@ class Video:
 		return self.vidcap.read()
 
 	def strip_audio(self,audiofilename):
-		subprocess.call(["ffmpeg","-y","-i",self.filename,"{}.mp3".format(audiofilename)], stdout=subprocess.DEVNULL,stderr=subprocess.STDOUT)
+		subprocess.call(["ffmpeg","-y","-i",self.filename,"{}".format(audiofilename)], stdout=subprocess.DEVNULL,stderr=subprocess.STDOUT)
 		

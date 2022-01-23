@@ -25,8 +25,8 @@ class Pixel:
 		self.b = fg.b*char.val + bg.b*(1-char.val)
 
 
-def run(color_booster):
-	f = open("config.txt","w+")
+def run(color_booster,config_file,display):
+	f = open(config_file,"w+")
 	colors = []
 	colors.append(Color(255,0,0,"RED","100"))
 	colors.append(Color(255,255,0,"YLW","110"))
@@ -62,7 +62,8 @@ def run(color_booster):
 					if dist < lowest_dist:
 						lowest_dist = dist
 						best = p
-				print("({0},{1},{2}) --> ({3},{4},{5}) --> ({6},{7},{8})".format(r,g,b,best.r,best.g,best.b,best.fg.name,best.bg.name,best.char.name))
+				if display:
+					print("({0},{1},{2}) --> ({3},{4},{5}) --> ({6},{7},{8})".format(r,g,b,best.r,best.g,best.b,best.fg.name,best.bg.name,best.char.name))
 				line = "{0:03d}{1:03d}{2:03d}-{3}{4}{5}\n".format(int(r/8),int(g/8),int(b/8),best.fg.number,best.bg.number,best.char.number)
 				f.write(line)
 	f.close()
@@ -71,4 +72,4 @@ def run(color_booster):
 
 if __name__ == '__main__':
 	color_booster = 15
-	run(color_booster)
+	run(color_booster,"config.txt",True)

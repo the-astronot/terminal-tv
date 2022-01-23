@@ -15,7 +15,9 @@ class Directory:
 		self.display = display
 		self.folders = []
 		self.files = []
-		for file in os.listdir(self.path):
+		files = os.listdir(self.path)
+		files.sort()
+		for file in files:
 			if os.path.isfile(os.path.join(self.path,file)):
 				try:
 					ext = file.split(".")[1]

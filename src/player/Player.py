@@ -19,6 +19,7 @@ class Player:
 	button_offset = 2
 
 	def __init__(self, path_to_files,audio_available):
+		self.path_to_files = path_to_files
 		self.termx, self.termy = os.get_terminal_size()
 		self.selector = Selector(path_to_files)
 		self.loaded = False
@@ -36,7 +37,7 @@ class Player:
 			if index == -1:
 				return
 		self.episode_index = index
-		self.video = FileReader(episode.files[index])
+		self.video = FileReader(os.path.join(self.path_to_files,episode.files[index]))
 		self.termx = self.video.x
 		self.termy = self.video.y + self.button_offset
 		self.spf = self.video.spf
@@ -44,7 +45,7 @@ class Player:
 		self.frame_num = int(episode.time/self.spf)
 		self.video.seek_frame(self.frame_num)
 		if episode.audio_file != "" and self.audio_available:
-			self.audio = vlc.MediaPlayer(episode.audio_file)
+			self.audio = vlc.MediaPlayer(os.path.join(self.path_to_files,episode.audio_file))
 			self.audio.audio_set_volume(0)
 			self.audio.play()
 			time.sleep(.5)
@@ -76,7 +77,7 @@ class Player:
 		self.last_frame_time = 0
 		# Save episode data
 		if self.episode != None:
-			if self.frame_num >= self.video.max_frames-100:
+			if self.frame_num >= self.video.max_frames-(60/self.spf):
 				self.episode.time = 0
 			else:
 				self.episode.time = self.spf*self.frame_num
@@ -141,6 +142,7 @@ class Player:
 			self.frame_num = 0
 			time_val = 0
 		elif self.frame_num >= self.video.max_frames-10:
+			self.audio_changed = False
 			self.stop()
 			return
 		else:

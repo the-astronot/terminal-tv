@@ -1,0 +1,4 @@
+# Video, dest, episode, term_width, target_fps, color
+videos/test_bbb.mp4,test/,big_buck_bunny,160,30,10
+videos/test_jellyfish.mkv,test/,jellyfish,,,
+videos/test_sintel.mp4,test2/inner_folder,sintel,,15,

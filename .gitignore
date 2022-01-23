@@ -134,3 +134,11 @@ dmypy.json
 *.mkv
 *.trm
 *.dtrm
+
+# Leave the tests though
+!videos/test_bbb.mp4
+!videos/test_jellyfish.mkv
+!videos/test_sintel.mp4
+
+# Config files
+*.conf

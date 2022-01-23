@@ -11,6 +11,7 @@ import src.player.Screens as Screens
 # Other Libraries
 import os
 import time
+from dotenv import load_dotenv
 
 # Check audio availability
 # Very basic, basically just checking 
@@ -73,7 +74,7 @@ def main(player):
 	player.render_selector()
 	loop = True
 	while(loop):
-		if player.audio_changed:
+		if player.audio_changed and player.audio != None:
 			player.audio_changed = False
 			player.audio.pause()
 		if player.play and player.loaded:
@@ -89,6 +90,8 @@ def main(player):
 	
 if __name__ == '__main__':
 	print("\033[2J",end="")
-	media_location = os.path.join(os.getcwd(),"example_filesystem")
+	load_dotenv()
+	media_location = os.getenv('MEDIA_LOCATION')
+	print(media_location)
 	player = Player(media_location,audio_available)
 	main(player)

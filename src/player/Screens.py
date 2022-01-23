@@ -61,7 +61,7 @@ def print_frame(text, frame_num, max_frames, width):
 
 def print_pickup(termy,termx,ptime,cursor):
 	midway = math.floor((termy-2)/2)
-	continue_text = "Continue at {0:2d}:{1:2d}".format(math.floor(ptime/60),int(ptime%60))
+	continue_text = "Continue at {0:2d}:{1:02d}".format(math.floor(ptime/60),int(ptime%60))
 	restart_text = "Restart Media"
 	wipe_screen(termy)
 	for _ in range(midway):

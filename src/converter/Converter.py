@@ -12,22 +12,37 @@ import os
 import time
 
 
-def convert(filename, episode_name, dest, term_width, fps_set, dict):
-	video = Video(filename)
-	episode_name = os.path.join(dest,episode_name) + ".dtrm"
+def convert(media_drive,filename,episode_name,dest,term_width,fps_set,dict):
+	# Getting all of the names out of the way
+	# Video Name -> Based of Current Dir -> fine
+	# Episode_Name -> based on input and media drive -> append
+	rel_episode_name = os.path.join(dest,episode_name) + ".dtrm"
+	episode_name = os.path.join(media_drive,rel_episode_name)
+	# Relative audioname -> derived from ep_name -> fine
+	rel_audio_name = rel_episode_name.replace(".dtrm",".mp3")
+	# Full audioname -> append
+	audio_name = os.path.join(media_drive,rel_audio_name)
+	# All folders on path to episode
 	folders = os.path.dirname(episode_name)
+	# File to save terminal file to
+
+	# Open Video File
+	video = Video(filename)
+	# Create any required folders
 	try:
 		os.makedirs(folders)
 	except OSError:
 		pass
+	# Create episode
 	episode = Episode(episode_name)
 	episode.read_episode()
+	# Save path for terminal file
 	file = os.path.join(folders,(os.path.basename(filename)).replace(".mkv","").replace(".mp4","")+"_{}.trm".format(len(episode.files)))
-	audio_filename = episode_name.replace(".dtrm","")
+	# Strip audio
 	if episode.audio_file == "":
 		print("Beginning Stripping Audio...")
-		video.strip_audio(audio_filename)
-		episode.audio_file = audio_filename + ".mp3"
+		video.strip_audio(audio_name)
+		episode.audio_file = rel_audio_name
 		print("Finishing Stripping Audio")
 	# Getting video dimensions
 	print("Getting Video Dimensions")
@@ -42,7 +57,7 @@ def convert(filename, episode_name, dest, term_width, fps_set, dict):
 	interval = math.ceil(fps/fps_set)
 	total_frames = int(frames/interval)
 	sec_per_frame = float(float(interval)/float(fps))
-	print("[Interval] = {1}\n[Sec/Frame] = {0:.3f}".format(sec_per_frame,interval))
+	print("[Interval] = {1}\n[Sec/Frame] = {0:.5f}".format(sec_per_frame,interval))
 	# Sets image reduction levels
 	x_redux = width/float(term_width)
 	y_redux = (x_redux*2)

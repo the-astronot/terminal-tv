@@ -1,0 +1,2 @@
+# LAUNCH CONVERTER
+cd "$(dirname ${BASH_SOURCE[0]})/.." && python3 -m src.converter $1 $2
