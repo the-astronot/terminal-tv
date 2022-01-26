@@ -7,6 +7,8 @@ This software converts video files into frames of ascii text that it is then cap
 ## Requirements
 
 - Python3
+- FFmpeg
+- VLC
 
 Everything else will be taken care of during setup
 
