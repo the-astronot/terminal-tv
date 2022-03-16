@@ -28,7 +28,7 @@ then
 	mkdir $MEDIA_FOLDER
 fi
 
-# Create Configs Folder
+# Create Config Foler
 if ! [[ -d "configs/" ]]
 then
 	mkdir "configs/"
