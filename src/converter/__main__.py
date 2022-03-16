@@ -29,6 +29,7 @@ def batch_convert(filename, delimiter):
 					print("CONFIG GENERATED")
 				color_dict = get_colors(config_file)
 				convert(media_drive,job_data[0],job_data[2],job_data[1],int(job_data[3]),int(job_data[4]),color_dict)
+				print()
 			
 
 def get_colors(config_file):
