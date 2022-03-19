@@ -44,7 +44,7 @@ class Player:
 		self.last_frame_time = 0
 		self.frame_num = int(episode.time/self.spf)
 		self.video.seek_frame(self.frame_num)
-		if episode.audio_file != "" and self.audio_available and os.path.exists(episode.audio_file):
+		if episode.audio_file != "" and self.audio_available and os.path.exists(os.path.join(self.path_to_files,episode.audio_file)):
 			self.audio = vlc.MediaPlayer(os.path.join(self.path_to_files,episode.audio_file))
 			self.audio.audio_set_volume(0)
 			self.audio.play()
